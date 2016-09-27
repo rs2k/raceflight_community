@@ -202,54 +202,6 @@ uint8_t spektrumFrameStatus(rxConfig_t *rxConfig, rxRuntimeConfig_t *rxRuntimeCo
 
 	rcFrameComplete = false;
 
-		
-		
-	if (!initialPacket) {
-
-	        
-	        
-		uint8_t spmResolution = rxConfig->serialrx_provider;
-
-		switch (spekFrame[1]) {
-		case 0xb2:       
-			spmResolution = SERIALRX_SPEKTRUM2048;
-			break;
-		case 0xa2:  
-			spmResolution = SERIALRX_SPEKTRUM2048;
-			break;
-		case 0x12:  
-			spmResolution = SERIALRX_SPEKTRUM2048;
-			break;
-		case 0x01:  
-			spmResolution = SERIALRX_SPEKTRUM1024;
-			break;
-		}
-
-		if (rxConfig->serialrx_provider != spmResolution) {
-			rxConfig->serialrx_provider = spmResolution;
-			saveConfigAndNotify();
-		}
-		    
-		switch (rxConfig->serialrx_provider) {
-		case SERIALRX_SPEKTRUM2048:
-		    
-			spek_chan_shift = 3;
-			spek_chan_mask = 0x07;
-			spekHiRes = true;
-			rxRuntimeConfig->channelCount = SPEKTRUM_2048_CHANNEL_COUNT;
-			break;
-		case SERIALRX_SPEKTRUM1024:
-		    
-			spek_chan_shift = 2;
-			spek_chan_mask = 0x03;
-			spekHiRes = false;
-			rxRuntimeConfig->channelCount = SPEKTRUM_1024_CHANNEL_COUNT;
-			break;
-		}
-
-		initialPacket = 1;    
-	}
-
 	frameLoss = spekFrame[0];   
 
 	for (b = 3; b < SPEK_FRAME_SIZE; b += 2) {
