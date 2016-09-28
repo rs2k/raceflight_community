@@ -16,14 +16,14 @@
  */
 
 #define FC_VERSION_TYPE_AUTO "BB"
-#define FC_BUILD_NUMBER_AUTO "343"
+#define FC_BUILD_NUMBER_AUTO "345"
 
 #define	FC_VERSION_IDENT			"RF"
 #define FC_VERSION_MAJOR            1
 #define FC_VERSION_MINOR            9
 #define FC_VERSION_PATCH_LEVEL      9
 
-#define FC_VERSION_COMMENT           "Bug fixing!"
+#define FC_VERSION_COMMENT           "Increment version"
 
 #define STR_HELPER(x) #x
 #define STR(x) STR_HELPER(x)
