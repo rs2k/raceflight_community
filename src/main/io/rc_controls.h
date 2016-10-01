@@ -36,6 +36,7 @@ typedef enum {
 	BOXTEST2,
 	BOXTEST3,
 	BOXSKITZO,
+	BOXLANDING,
 	CHECKBOX_ITEM_COUNT
 } boxId_e;
 

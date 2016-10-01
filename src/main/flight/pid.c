@@ -236,7 +236,7 @@ static void pidRfFloat(pidProfile_t *pidProfile, controlRateConfig_t *controlRat
 	    if (axis == FD_PITCH) {
 
 	        
-	        if (FullKiLatched) {
+	        if ((FullKiLatched) && !(FLIGHT_MODE(BOXLANDING))) {
 		        errorGyroIf[axis] = constrainf(errorGyroIf[axis] + RateError * dT * (pidProfile->I_f[axis] / 2)  * 10, -250.0f, 250.0f);
 		        if (motorLimitReached) {
 			        errorGyroIf[axis] = constrainf(errorGyroIf[axis], -errorGyroIfLimit[axis], errorGyroIfLimit[axis]);
@@ -265,7 +265,7 @@ static void pidRfFloat(pidProfile_t *pidProfile, controlRateConfig_t *controlRat
 	        
 	        
 
-	        if (FullKiLatched) {
+	        if ((FullKiLatched) && !(FLIGHT_MODE(BOXLANDING))) {
 	        	ITerm = constrainf( errorGyroIf[axis] * dT * (pidProfile->I_f[axis]/2)  * 10, -250.0f, 250.0f);
 	        } else {
 	            ITerm = constrainf( errorGyroIf[axis] * dT * (pidProfile->I_f[axis]/2)  * 10, -20.0f, 20.0f);

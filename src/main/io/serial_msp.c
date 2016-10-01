@@ -359,6 +359,7 @@ static const box_t boxes[CHECKBOX_ITEM_COUNT + 1] = {
     { BOXTEST2, "TEST 2;", 13 },
     { BOXTEST3, "TEST 3;", 14 },
     { BOXSKITZO, "SKITZO;", 15 },
+	{ BOXLANDING, "LANDING;", 16},
 
     { CHECKBOX_ITEM_COUNT, NULL, 0xFF }
 };
@@ -667,6 +668,7 @@ void mspInit(serialConfig_t *serialConfig)
 	activeBoxIds[activeBoxIdCount++] = BOXTEST2;
 	activeBoxIds[activeBoxIdCount++] = BOXTEST3;
 	activeBoxIds[activeBoxIdCount++] = BOXSKITZO;
+	activeBoxIds[activeBoxIdCount++] = BOXLANDING;
 	activeBoxIds[activeBoxIdCount++] = BOXLEDON;
 	activeBoxIds[activeBoxIdCount++] = BOXLEDCHNGCOLOR;
 	activeBoxIds[activeBoxIdCount++] = BOXLEDCHNGPROG;
@@ -806,7 +808,8 @@ bool processOutCommand(uint8_t cmdMSP)
             IS_ENABLED(IS_RC_MODE_ACTIVE(BOXTEST1)) << BOXTEST1 |
             IS_ENABLED(IS_RC_MODE_ACTIVE(BOXTEST2)) << BOXTEST2 |
             IS_ENABLED(IS_RC_MODE_ACTIVE(BOXTEST3)) << BOXTEST3 |
-			IS_ENABLED(IS_RC_MODE_ACTIVE(BOXSKITZO)) << BOXSKITZO;
+			IS_ENABLED(IS_RC_MODE_ACTIVE(BOXSKITZO)) << BOXSKITZO|
+			IS_ENABLED(IS_RC_MODE_ACTIVE(BOXLANDING)) << BOXLANDING;
 
         	
         for (i = 0; i < activeBoxIdCount; i++) {
