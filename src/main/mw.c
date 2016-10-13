@@ -369,15 +369,10 @@ void annexCode(void)
     int32_t tmp, tmp2;
     float tmp3, tmp4;
     int32_t axis;
-    bool allowSkitzo = false;
 
     float OldRange, OldValue, NewRange, NewValue, OldMax, OldMin, NewMax, NewMin, deadBand;
 
-#if defined(REVO) || defined(REVOLT)
-    allowSkitzo = true;
-#endif
-
-    if (IS_RC_MODE_ACTIVE(BOXSKITZO) && allowSkitzo) {
+    if (1) {
 
 		for (axis = 0; axis < 3; axis++) {
 

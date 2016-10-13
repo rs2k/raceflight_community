@@ -16,7 +16,7 @@
  */
 
 #define FC_VERSION_TYPE_AUTO "BB"
-#define FC_BUILD_NUMBER_AUTO "346"
+#define FC_BUILD_NUMBER_AUTO "348"
 
 #define	FC_VERSION_IDENT			"RF"
 #define FC_VERSION_MAJOR            1
