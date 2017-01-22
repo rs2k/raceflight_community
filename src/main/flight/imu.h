@@ -1,51 +1,46 @@
-/*
- * This file is part of RaceFlight.
- *
- * RaceFlight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RaceFlight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
  * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#pragma once
-
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
+#pragma once 
+       
 extern int16_t throttleAngleCorrection;
 extern uint32_t accTimeSum;
 extern int accSumCount;
 extern float accVelScale;
 extern int16_t accSmooth[XYZ_AXIS_COUNT];
 extern int32_t accSum[XYZ_AXIS_COUNT];
-
 #define DEGREES_TO_DECIDEGREES(angle) (angle * 10)
 #define DECIDEGREES_TO_DEGREES(angle) (angle / 10)
 #define DECIDEGREES_TO_RADIANS(angle) ((angle / 10.0f) * 0.0174532925f)
 #define DEGREES_TO_RADIANS(angle) ((angle) * 0.0174532925f)
-
 typedef union {
     int16_t raw[XYZ_AXIS_COUNT];
     struct {
-        
         int16_t roll;
         int16_t pitch;
         int16_t yaw;
     } values;
 } attitudeEulerAngles_t;
-
 extern attitudeEulerAngles_t attitude;
-
 typedef struct accDeadband_s {
-    uint8_t xy;                 
-    uint8_t z;                  
+    uint8_t xy;
+    uint8_t z;
 } accDeadband_t;
-
 typedef struct imuRuntimeConfig_s {
     uint8_t acc_cut_hz;
     uint8_t acc_unarmedcal;
@@ -53,7 +48,6 @@ typedef struct imuRuntimeConfig_s {
     float dcm_kp;
     uint8_t small_angle;
 } imuRuntimeConfig_t;
-
 typedef enum {
     ACCPROC_READ = 0,
     ACCPROC_CHUNK_1,
@@ -65,11 +59,9 @@ typedef enum {
     ACCPROC_CHUNK_7,
     ACCPROC_COPY
 } accProcessorState_e;
-
 typedef struct accProcessor_s {
     accProcessorState_e state;
 } accProcessor_t;
-
 void imuConfigure(
     imuRuntimeConfig_t *initialImuRuntimeConfig,
     pidProfile_t *initialPidProfile,
@@ -77,16 +69,13 @@ void imuConfigure(
     float accz_lpf_cutoff,
     uint16_t throttle_correction_angle
 );
-
 void calculateEstimatedAltitude(uint32_t currentTime);
 void imuUpdateAccelerometer(rollAndPitchTrims_t *accelerometerTrims);
 void imuUpdateGyroAndAttitude(void);
 float calculateThrottleAngleScale(uint16_t throttle_correction_angle);
 int16_t calculateThrottleAngleCorrection(uint8_t throttle_correction_value);
 float calculateAccZLowPassFilterRCTimeConstant(float accz_lpf_cutoff);
-
 int16_t imuCalculateHeading(t_fp_vector *vec);
-
 void imuResetAccelerationSum(void);
 void imuUpdateGyro(void);
 void imuUpdateAcc(rollAndPitchTrims_t *accelerometerTrims);

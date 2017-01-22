@@ -14,7 +14,7 @@
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
  *
- *        http:
+ *        http://www.st.com/software_license_agreement_liberty_v2
  *
  * Unless required by applicable law or agreed to in writing, software 
  * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -48,11 +48,11 @@
 /* Private variables ---------------------------------------------------------*/
 ErrorStatus HSEStartUpStatus;
 EXTI_InitTypeDef EXTI_InitStructure;
-__IO uint32_t packetSent;                                     
-extern __IO uint32_t receiveLength;                          
+__IO uint32_t packetSent;                                     // HJI
+extern __IO uint32_t receiveLength;                          // HJI
 
-uint8_t receiveBuffer[64];                                   
-uint32_t sendLength;                                          
+uint8_t receiveBuffer[64];                                   // HJI
+uint32_t sendLength;                                          // HJI
 /* Extern variables ----------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
@@ -84,30 +84,30 @@ void Set_System(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 #endif /* STM32L1XX_XD */ 
 
-    /*Pull down PA12 to create USB Disconnect Pulse*/     
-#if defined(STM32F303xC)                                    
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);   
+    /*Pull down PA12 to create USB Disconnect Pulse*/     // HJI
+#if defined(STM32F303xC)                                    // HJI
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);   // HJI
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;          
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;     
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;        
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;        
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;     
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;          // HJI
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;     // HJI
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;        // HJI
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;        // HJI
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;     // HJI
 #else
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); 
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); // HJI
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;// HJI
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;// HJI
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;// HJI
 #endif
 
-    GPIO_Init(GPIOA, &GPIO_InitStructure);                
+    GPIO_Init(GPIOA, &GPIO_InitStructure);                // HJI
 
-    GPIO_ResetBits(GPIOA, GPIO_Pin_12);                   
+    GPIO_ResetBits(GPIOA, GPIO_Pin_12);                   // HJI
 
-    delay(200);                                           
+    delay(200);                                           // HJI
 
-    GPIO_SetBits(GPIOA, GPIO_Pin_12);                     
+    GPIO_SetBits(GPIOA, GPIO_Pin_12);                     // HJI
 
 #if defined(STM32F37X) || defined(STM32F303xC)
 
@@ -200,7 +200,7 @@ void USB_Interrupts_Config(void)
     NVIC_InitTypeDef NVIC_InitStructure;
 
     /* 2 bit for pre-emption priority, 2 bits for subpriority */
-    NVIC_PriorityGroupConfig(NVIC_PRIORITY_GROUPING);     
+    NVIC_PriorityGroupConfig(NVIC_PRIORITY_GROUPING);     // is this really neccesary?
 
     /* Enable the USB interrupt */
     NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
@@ -241,12 +241,12 @@ uint32_t CDC_Send_DATA(uint8_t *ptrBuffer, uint8_t sendLength)
         return 0;
     }
 
-    
+    // We can only put 64 bytes in the buffer
     if (sendLength > 64 / 2) {
         sendLength = 64 / 2;
     }
 
-    
+    // Try to load some bytes if we can
     if (sendLength) {
         UserToPMABufferCopy(ptrBuffer, ENDP1_TXADDR, sendLength);
         SetEPTxCount(ENDP1, sendLength);

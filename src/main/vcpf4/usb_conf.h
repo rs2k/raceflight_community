@@ -50,7 +50,7 @@
 #endif /* USE_USB_OTG_FS */
 
 #ifndef USE_USB_OTG_HS
- 
+ //#define USE_USB_OTG_HS
 #endif /* USE_USB_OTG_HS */
 
 #ifndef USE_ULPI_PHY
@@ -58,11 +58,11 @@
 #endif /* USE_ULPI_PHY */
 
 #ifndef USE_EMBEDDED_PHY
- 
+ //#define USE_EMBEDDED_PHY
 #endif /* USE_EMBEDDED_PHY */
 
 #ifndef USE_I2C_PHY
- 
+ //#define USE_I2C_PHY
 #endif /* USE_I2C_PHY */
 
 
@@ -139,10 +139,10 @@
  #define TXH_NP_HS_FIFOSIZ                         96
  #define TXH_P_HS_FIFOSIZ                          96
 
- 
- 
+ //#define USB_OTG_HS_LOW_PWR_MGMT_SUPPORT
+ //#define USB_OTG_HS_SOF_OUTPUT_ENABLED
 
- 
+ //#define USB_OTG_INTERNAL_VBUS_ENABLED
  #define USB_OTG_EXTERNAL_VBUS_ENABLED
 
  #ifdef USE_ULPI_PHY
@@ -168,14 +168,14 @@
  #define TXH_NP_FS_FIFOSIZ                         96
  #define TXH_P_FS_FIFOSIZ                          96
 
- 
- 
+ //#define USB_OTG_FS_LOW_PWR_MGMT_SUPPORT
+ //#define USB_OTG_FS_SOF_OUTPUT_ENABLED
 #endif
 
 /****************** USB OTG MODE CONFIGURATION ********************************/
-
+//#define USE_HOST_MODE
 #define USE_DEVICE_MODE
-
+//#define USE_OTG_MODE
 
 
 #ifndef USB_OTG_FS_CORE
@@ -195,7 +195,7 @@
  #ifndef USE_USB_OTG_FS
     #error  "USE_USB_OTG_HS or USE_USB_OTG_FS should be defined"
  #endif
-#else 
+#else //USE_USB_OTG_HS
  #ifndef USE_ULPI_PHY
   #ifndef USE_EMBEDDED_PHY
    #ifndef USE_I2C_PHY
@@ -275,7 +275,7 @@
   */ 
 
 
-#endif 
+#endif //__USB_CONF__H__
 
 
 /**

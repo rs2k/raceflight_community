@@ -1,40 +1,39 @@
-/*
- * This file is part of RaceFlight.
- *
- * RaceFlight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RaceFlight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
  * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#pragma once
-
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
+#pragma once 
+       
 typedef enum {
     PORTSHARING_UNUSED = 0,
     PORTSHARING_NOT_SHARED,
     PORTSHARING_SHARED
 } portSharing_e;
-
 typedef enum {
-    FUNCTION_NONE                = 0,
-    FUNCTION_MSP                 = (1 << 0), 
-    FUNCTION_GPS                 = (1 << 1), 
-    FUNCTION_TELEMETRY_FRSKY     = (1 << 2), 
-    FUNCTION_TELEMETRY_HOTT      = (1 << 3), 
-    FUNCTION_TELEMETRY_MSP       = (1 << 4), 
-    FUNCTION_TELEMETRY_SMARTPORT = (1 << 5), 
-    FUNCTION_RX_SERIAL           = (1 << 6), 
-    FUNCTION_BLACKBOX            = (1 << 7)  
+    FUNCTION_NONE = 0,
+    FUNCTION_MSP = (1 << 0),
+    FUNCTION_GPS = (1 << 1),
+    FUNCTION_TELEMETRY_FRSKY = (1 << 2),
+    FUNCTION_TELEMETRY_HOTT = (1 << 3),
+    FUNCTION_TELEMETRY_MSP = (1 << 4),
+    FUNCTION_TELEMETRY_SMARTPORT = (1 << 5),
+    FUNCTION_RX_SERIAL = (1 << 6),
+    FUNCTION_BLACKBOX = (1 << 7)
 } serialPortFunction_e;
-
 typedef enum {
     BAUD_AUTO = 0,
     BAUD_9600,
@@ -45,10 +44,7 @@ typedef enum {
     BAUD_230400,
     BAUD_250000
 } baudRate_e;
-
 extern const uint32_t baudRates[];
-
-
 typedef enum {
     SERIAL_PORT_NONE = -1,
     SERIAL_PORT_USART1 = 0,
@@ -62,41 +58,26 @@ typedef enum {
     SERIAL_PORT_SOFTSERIAL2,
     SERIAL_PORT_IDENTIFIER_MAX = SERIAL_PORT_SOFTSERIAL2
 } serialPortIdentifier_e;
-
 extern const serialPortIdentifier_e serialPortIdentifiers[SERIAL_PORT_COUNT];
-
-
-
-
 typedef struct serialPortUsage_s {
     serialPortIdentifier_e identifier;
     serialPort_t *serialPort;
     serialPortFunction_e function;
 } serialPortUsage_t;
-
 serialPort_t *findSharedSerialPort(uint16_t functionMask, serialPortFunction_e sharedWithFunction);
 serialPort_t *findNextSharedSerialPort(uint16_t functionMask, serialPortFunction_e sharedWithFunction);
-
-
-
-
 typedef struct serialPortConfig_s {
     serialPortIdentifier_e identifier;
     uint16_t functionMask;
     uint8_t msp_baudrateIndex;
     uint8_t gps_baudrateIndex;
     uint8_t blackbox_baudrateIndex;
-    uint8_t telemetry_baudrateIndex; 
+    uint8_t telemetry_baudrateIndex;
 } serialPortConfig_t;
-
 typedef struct serialConfig_s {
-    uint8_t reboot_character;               
+    uint8_t reboot_character;
     serialPortConfig_t portConfigs[SERIAL_PORT_COUNT];
 } serialConfig_t;
-
-
-
-
 void serialRemovePort(serialPortIdentifier_e identifier);
 uint8_t serialGetAvailablePortCount(void);
 bool serialIsPortAvailable(serialPortIdentifier_e identifier);
@@ -105,13 +86,8 @@ serialPortConfig_t *serialFindPortConfiguration(serialPortIdentifier_e identifie
 bool doesConfigurationUsePort(serialPortIdentifier_e portIdentifier);
 serialPortConfig_t *findSerialPortConfig(serialPortFunction_e function);
 serialPortConfig_t *findNextSerialPortConfig(serialPortFunction_e function);
-
 portSharing_e determinePortSharing(serialPortConfig_t *portConfig, serialPortFunction_e function);
 bool isSerialPortShared(serialPortConfig_t *portConfig, uint16_t functionMask, serialPortFunction_e sharedWithFunction);
-
-
-
-
 serialPort_t *openSerialPort(
     serialPortIdentifier_e identifier,
     serialPortFunction_e function,
@@ -120,14 +96,8 @@ serialPort_t *openSerialPort(
     portMode_t mode,
     portOptions_t options
 );
-
 void closeSerialPort(serialPort_t *serialPort);
 void waitForSerialPortToFinishTransmitting(serialPort_t *serialPort);
-
 baudRate_e lookupBaudRateIndex(uint32_t baudRate);
-
-
-
-
 void evaluateOtherData(serialPort_t *serialPort, uint8_t receivedChar);
 void handleSerial(void);

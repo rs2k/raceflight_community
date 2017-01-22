@@ -1,29 +1,28 @@
-/*
- * This file is part of RaceFlight.
- *
- * RaceFlight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RaceFlight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
  * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#pragma once
-
-
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
+#pragma once 
+       
 #define LOWPASS_NUM_COEF 3
 #define LPF_ROUND(x) (x < 0 ? (x - 0.5f) : (x + 0.5f))
-
 typedef struct lowpass_s {
     bool init;
-    int16_t freq;                           
+    int16_t freq;
     float bf[LOWPASS_NUM_COEF];
     float af[LOWPASS_NUM_COEF];
     int64_t b[LOWPASS_NUM_COEF];
@@ -36,6 +35,5 @@ typedef struct lowpass_s {
     int32_t x[LOWPASS_NUM_COEF];
     int32_t y[LOWPASS_NUM_COEF];
 } lowpass_t;
-
 void generateLowpassCoeffs2(int16_t freq, lowpass_t *filter);
 int32_t lowpassFixed(lowpass_t *filter, int32_t in, int16_t freq);

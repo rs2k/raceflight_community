@@ -1,58 +1,48 @@
-/*
- * This file is part of Raceflight.
- *
- * Raceflight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Raceflight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Raceflight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
 #include "include.h"
-
-#define AIRCR_VECTKEY_MASK    ((uint32_t)0x05FA0000)
-
-
+#define AIRCR_VECTKEY_MASK ((uint32_t)0x05FA0000)
 void systemReset(void)
 {
-	resetGyro();
-	__disable_irq();
-	NVIC_SystemReset();
+ resetGyro();
+ __disable_irq();
+ NVIC_SystemReset();
 }
-
 void systemResetToBootloader(void) {
-
-	resetGyro();
-	*((uint32_t *)0x2001FFFC) = 0xDEADBEEF; 
-	__disable_irq();
-	NVIC_SystemReset();
-
+ systemResetToDFUloader();
 }
-
+void systemResetToRecoveryloader(void) {
+ systemResetToDFUloader();
+}
 void systemResetToDFUloader(void) {
-
-	resetGyro();
-	*((uint32_t *)0x2001FFFC) = 0xDEADBEEF; 
-	__disable_irq();
-	NVIC_SystemReset();
-
+ resetGyro();
+ *((uint32_t *)0x2001FFFC) = 0xDEADBEEF;
+ __disable_irq();
+ NVIC_SystemReset();
 }
-
 void enableGPIOPowerUsageAndNoiseReductions(void)
 {
-
     RCC_AHB1PeriphClockCmd(
         RCC_AHB1Periph_GPIOA |
         RCC_AHB1Periph_GPIOB |
@@ -72,9 +62,8 @@ void enableGPIOPowerUsageAndNoiseReductions(void)
         RCC_AHB1Periph_BKPSRAM |
         RCC_AHB1Periph_DMA1 |
         RCC_AHB1Periph_DMA2 |
-		0, ENABLE
+  0, ENABLE
     );
-
     RCC_AHB2PeriphClockCmd(
         0, ENABLE);
 #if defined(STM32F40_41xxx) || defined(STM32F446xx)
@@ -106,7 +95,6 @@ void enableGPIOPowerUsageAndNoiseReductions(void)
         RCC_APB1Periph_PWR |
         RCC_APB1Periph_DAC |
         0, ENABLE);
-
     RCC_APB2PeriphClockCmd(
         RCC_APB2Periph_TIM1 |
         RCC_APB2Periph_TIM8 |
@@ -123,25 +111,19 @@ void enableGPIOPowerUsageAndNoiseReductions(void)
         RCC_APB2Periph_TIM10 |
         RCC_APB2Periph_TIM11 |
         0, ENABLE);
-
     GPIO_InitTypeDef GPIO_InitStructure;
     GPIO_StructInit(&GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; 
-
-    GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_All;
-    GPIO_InitStructure.GPIO_Pin &= ~(GPIO_Pin_11 | GPIO_Pin_12); 
-
-    GPIO_InitStructure.GPIO_Pin &= ~(GPIO_Pin_13 | GPIO_Pin_14); 
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+    GPIO_InitStructure.GPIO_Pin &= ~(GPIO_Pin_11 | GPIO_Pin_12);
+    GPIO_InitStructure.GPIO_Pin &= ~(GPIO_Pin_13 | GPIO_Pin_14);
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_All;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_All;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
     GPIO_Init(GPIOD, &GPIO_InitStructure);
     GPIO_Init(GPIOE, &GPIO_InitStructure);
-
 #if defined(STM32F40_41xxx)
     GPIO_Init(GPIOF, &GPIO_InitStructure);
     GPIO_Init(GPIOG, &GPIO_InitStructure);
@@ -152,9 +134,7 @@ void enableGPIOPowerUsageAndNoiseReductions(void)
     GPIO_Init(GPIOG, &GPIO_InitStructure);
     GPIO_Init(GPIOH, &GPIO_InitStructure);
 #endif
-
 }
-
 bool isMPUSoftReset(void)
 {
     if (RCC->CSR & RCC_CSR_SFTRSTF)

@@ -1,29 +1,28 @@
-/*
- * This file is part of RaceFlight.
- *
- * RaceFlight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RaceFlight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
  * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#pragma once
-
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
+#pragma once 
+       
 #include "drivers/io.h"
 #include "drivers/rcc.h"
-
 #ifndef I2C_DEVICE
 #define I2C_DEVICE I2CINVALID
-#endif 
-
+#endif
 typedef enum I2CDevice {
     I2CINVALID = -1,
     I2CDEV_1 = 0,
@@ -31,7 +30,6 @@ typedef enum I2CDevice {
     I2CDEV_3,
     I2CDEV_MAX = I2CDEV_3,
 } I2CDevice;
-
 typedef struct i2cDevice_s {
     I2C_TypeDef *dev;
     ioTag_t scl;
@@ -43,7 +41,6 @@ typedef struct i2cDevice_s {
     uint8_t er_irq;
 #endif
 } i2cDevice_t;
-
 typedef struct i2cState_s {
     volatile bool error;
     volatile bool busy;
@@ -55,7 +52,6 @@ typedef struct i2cState_s {
     volatile uint8_t* write_p;
     volatile uint8_t* read_p;
 } i2cState_t;
-
 void i2cInit(I2CDevice device);
 bool i2cWriteBuffer(I2CDevice device, uint8_t addr_, uint8_t reg_, uint8_t len_, uint8_t *data);
 bool i2cWrite(I2CDevice device, uint8_t addr_, uint8_t reg, uint8_t data);

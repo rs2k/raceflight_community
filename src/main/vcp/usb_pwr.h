@@ -14,7 +14,7 @@
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
  *
- *        http:
+ *        http://www.st.com/software_license_agreement_liberty_v2
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -62,7 +62,7 @@ RESULT PowerOff(void);
 
 /* External variables --------------------------------------------------------*/
 extern __IO uint32_t bDeviceState; /* USB device status */
-extern __IO boolean fSuspendEnabled; /* true when suspend is possible */  
+extern __IO boolean fSuspendEnabled; /* true when suspend is possible */  // HJI
 #endif  /*__USB_PWR_H*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

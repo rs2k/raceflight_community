@@ -57,24 +57,52 @@
   * @{
   */ 
 #define USBD_LANGID_STRING              0x409
-#define USBD_MANUFACTURER_STRING        "RaceFlight"
+#define USBD_MANUFACTURER_STRING        "STMicroelectronics"
+
+
+
+
+/**************/
 
 #ifdef USBD_PRODUCT_STRING
-  #define USBD_PRODUCT_HS_STRING          USBD_PRODUCT_STRING
-  #define USBD_PRODUCT_FS_STRING          USBD_PRODUCT_STRING
+  #define USBD_PRODUCT_HS_STRING          "STM32 Virtual COM Port"
+  #define USBD_PRODUCT_FS_STRING          "STM32 Virtual COM Port"
 #else
+
   #define USBD_PRODUCT_HS_STRING          "STM32 Virtual ComPort in HS mode"
   #define USBD_PRODUCT_FS_STRING          "STM32 Virtual ComPort in FS Mode"
-#endif /* USBD_PRODUCT_STRING */
+
+#endif // USBD_PRODUCT_STRING 
+
+/*
+
+  #define USBD_PRODUCT_HS_STRING          "STM32 Virtual ComPort in HS mode"
+  #define USBD_PRODUCT_FS_STRING          "STM32 Virtual ComPort in FS Mode"
+
+  
+/****************************/
+
+
+
+
+/**************/
 
 #ifdef USBD_SERIALNUMBER_STRING
-  #define USBD_SERIALNUMBER_HS_STRING          USBD_SERIALNUMBER_STRING
-  #define USBD_SERIALNUMBER_FS_STRING          USBD_SERIALNUMBER_STRING
+  #define USBD_SERIALNUMBER_HS_STRING          "STM32"
+  #define USBD_SERIALNUMBER_FS_STRING          "STM32"
 #else
+  // start of STM32 flash
   
   #define USBD_SERIALNUMBER_HS_STRING     "0x8000000"
   #define USBD_SERIALNUMBER_FS_STRING     "0x8000000"
-#endif /* USBD_SERIALNUMBER_STRING */
+
+#endif // USBD_SERIALNUMBER_STRING 
+
+
+  #define USBD_SERIALNUMBER_HS_STRING     "0x8020000"
+  #define USBD_SERIALNUMBER_FS_STRING     "0x8020000"
+   
+/*****************************************/
 
 #define USBD_CONFIGURATION_HS_STRING    "VCP Config"
 #define USBD_INTERFACE_HS_STRING        "VCP Interface"
@@ -122,9 +150,9 @@ __ALIGN_BEGIN uint8_t USBD_DeviceDesc[USB_SIZ_DEVICE_DESC] __ALIGN_END =
     USB_DEVICE_DESCRIPTOR_TYPE, /*bDescriptorType*/
     0x00,                       /*bcdUSB */
     0x02,
-    0xef,                       /*bDeviceClass*/
+    0x02,                       /*bDeviceClass*/
     0x02,                       /*bDeviceSubClass*/
-    0x01,                       /*bDeviceProtocol*/
+    0x00,                       /*bDeviceProtocol*/
     USB_OTG_MAX_EP0_SIZE,      /*bMaxPacketSize*/
     LOBYTE(USBD_VID),           /*idVendor*/
     HIBYTE(USBD_VID),           /*idVendor*/

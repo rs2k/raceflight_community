@@ -1,22 +1,23 @@
-/*
- * This file is part of RaceFlight.
- *
- * RaceFlight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RaceFlight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
  * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#pragma once
-
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
+#pragma once 
+       
 #if defined(STM32F10X)
 typedef enum
 {
@@ -30,46 +31,42 @@ typedef enum
     Mode_AF_PP = 0x18
 } GPIO_Mode;
 #endif
-
 #ifdef STM32F303xC
 typedef enum
 {
-    Mode_AIN =          (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_AN,
-    Mode_IN_FLOATING =  (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_IN,
-    Mode_IPD =          (GPIO_PuPd_DOWN   << 2) | GPIO_Mode_IN,
-    Mode_IPU =          (GPIO_PuPd_UP     << 2) | GPIO_Mode_IN,
-    Mode_Out_OD =       (GPIO_OType_OD << 4) | GPIO_Mode_OUT,
-    Mode_Out_PP =       (GPIO_OType_PP << 4) | GPIO_Mode_OUT,
-    Mode_AF_OD =        (GPIO_OType_OD << 4) | GPIO_Mode_AF,
-    Mode_AF_PP =        (GPIO_OType_PP << 4) | GPIO_Mode_AF,
-    Mode_AF_PP_PD =     (GPIO_OType_PP << 4) | (GPIO_PuPd_DOWN  << 2) | GPIO_Mode_AF,
-    Mode_AF_PP_PU =     (GPIO_OType_PP << 4) | (GPIO_PuPd_UP    << 2) | GPIO_Mode_AF
+    Mode_AIN = (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_AN,
+    Mode_IN_FLOATING = (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_IN,
+    Mode_IPD = (GPIO_PuPd_DOWN << 2) | GPIO_Mode_IN,
+    Mode_IPU = (GPIO_PuPd_UP << 2) | GPIO_Mode_IN,
+    Mode_Out_OD = (GPIO_OType_OD << 4) | GPIO_Mode_OUT,
+    Mode_Out_PP = (GPIO_OType_PP << 4) | GPIO_Mode_OUT,
+    Mode_AF_OD = (GPIO_OType_OD << 4) | GPIO_Mode_AF,
+    Mode_AF_PP = (GPIO_OType_PP << 4) | GPIO_Mode_AF,
+    Mode_AF_PP_PD = (GPIO_OType_PP << 4) | (GPIO_PuPd_DOWN << 2) | GPIO_Mode_AF,
+    Mode_AF_PP_PU = (GPIO_OType_PP << 4) | (GPIO_PuPd_UP << 2) | GPIO_Mode_AF
 } GPIO_Mode;
 #endif
-
 #if defined(STM32F40_41xxx) || defined (STM32F411xE) || defined(STM32F446xx)
 typedef enum
 {
-    Mode_AIN =          (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_AN,
-    Mode_IN_FLOATING =  (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_IN,
-    Mode_IPD =          (GPIO_PuPd_DOWN   << 2) | GPIO_Mode_IN,
-    Mode_IPU =          (GPIO_PuPd_UP     << 2) | GPIO_Mode_IN,
-    Mode_Out_OD =       (GPIO_OType_OD    << 4) | GPIO_Mode_OUT,
-    Mode_Out_PP =       (GPIO_OType_PP    << 4) | GPIO_Mode_OUT,
-    Mode_AF_OD =        (GPIO_OType_OD    << 4) | GPIO_Mode_AF,
-    Mode_AF_PP =        (GPIO_OType_PP    << 4) | GPIO_Mode_AF,
-    Mode_AF_PP_PD =     (GPIO_OType_PP    << 4) | (GPIO_PuPd_DOWN  << 2) | GPIO_Mode_AF,
-    Mode_AF_PP_PU =     (GPIO_OType_PP    << 4) | (GPIO_PuPd_UP    << 2) | GPIO_Mode_AF
+    Mode_AIN = (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_AN,
+    Mode_IN_FLOATING = (GPIO_PuPd_NOPULL << 2) | GPIO_Mode_IN,
+    Mode_IPD = (GPIO_PuPd_DOWN << 2) | GPIO_Mode_IN,
+    Mode_IPU = (GPIO_PuPd_UP << 2) | GPIO_Mode_IN,
+    Mode_Out_OD = (GPIO_OType_OD << 4) | GPIO_Mode_OUT,
+    Mode_Out_PP = (GPIO_OType_PP << 4) | GPIO_Mode_OUT,
+    Mode_AF_OD = (GPIO_OType_OD << 4) | GPIO_Mode_AF,
+    Mode_AF_PP = (GPIO_OType_PP << 4) | GPIO_Mode_AF,
+    Mode_AF_PP_PD = (GPIO_OType_PP << 4) | (GPIO_PuPd_DOWN << 2) | GPIO_Mode_AF,
+    Mode_AF_PP_PU = (GPIO_OType_PP << 4) | (GPIO_PuPd_UP << 2) | GPIO_Mode_AF
 } GPIO_Mode;
 #endif
-
 typedef enum
 {
     Speed_10MHz = 1,
     Speed_2MHz,
     Speed_50MHz
 } GPIO_Speed;
-
 typedef enum
 {
     Pin_0 = 0x0001,
@@ -90,14 +87,12 @@ typedef enum
     Pin_15 = 0x8000,
     Pin_All = 0xFFFF
 } GPIO_Pin;
-
 typedef struct
 {
     uint16_t pin;
     GPIO_Mode mode;
     GPIO_Speed speed;
 } gpio_config_t;
-
 #ifndef UNIT_TEST
 #if defined(STM32F40_41xxx) || defined (STM32F411xE) || defined(STM32F446xx)
 static inline void digitalHi(GPIO_TypeDef *p, uint16_t i) { p->BSRRL = i; }
@@ -109,7 +104,6 @@ static inline void digitalLo(GPIO_TypeDef *p, uint16_t i) { p->BRR = i; }
 static inline void digitalToggle(GPIO_TypeDef *p, uint16_t i) { p->ODR ^= i; }
 static inline uint16_t digitalIn(GPIO_TypeDef *p, uint16_t i) { return p->IDR & i; }
 #endif
-
 void gpioInit(GPIO_TypeDef *gpio, gpio_config_t *config);
 void gpioExtiLineConfig(uint8_t portsrc, uint8_t pinsrc);
 void gpioPinRemapConfig(uint32_t remap, bool enable);

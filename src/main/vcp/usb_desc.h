@@ -14,7 +14,7 @@
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
  *
- *        http:
+ *        http://www.st.com/software_license_agreement_liberty_v2
  *
  * Unless required by applicable law or agreed to in writing, software 
  * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -62,7 +62,7 @@ extern const uint8_t Virtual_Com_Port_ConfigDescriptor[VIRTUAL_COM_PORT_SIZ_CONF
 #endif /* USBD_PRODUCT_STRING */
 
 #ifndef USBD_SERIALNUMBER_STRING
-  
+  // start of STM32 flash
   #define USBD_SERIALNUMBER_STRING     "0x8000000"
 #endif /* USBD_SERIALNUMBER_STRING */
 

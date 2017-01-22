@@ -14,7 +14,7 @@
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
  *
- *        http:
+ *        http://www.st.com/software_license_agreement_liberty_v2
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,7 @@
 #define __HW_CONFIG_H
 
 /* Includes ------------------------------------------------------------------*/
-
+//#include "platform_config.h"
 #include "usb_type.h"
 #ifdef STM32F303
 #include "stm32f30x.h"
@@ -55,14 +55,14 @@ void Leave_LowPowerMode(void);
 void USB_Interrupts_Config(void);
 void USB_Cable_Config(FunctionalState NewState);
 void Get_SerialNum(void);
-uint32_t CDC_Send_DATA(uint8_t *ptrBuffer, uint8_t sendLength);  
-uint32_t CDC_Receive_DATA(uint8_t* recvBuf, uint32_t len);       
-uint8_t usbIsConfigured(void);  
-uint8_t usbIsConnected(void);   
+uint32_t CDC_Send_DATA(uint8_t *ptrBuffer, uint8_t sendLength);  // HJI
+uint32_t CDC_Receive_DATA(uint8_t* recvBuf, uint32_t len);       // HJI
+uint8_t usbIsConfigured(void);  // HJI
+uint8_t usbIsConnected(void);   // HJI
 /* External variables --------------------------------------------------------*/
 
-extern __IO uint32_t receiveLength;  
-extern __IO uint32_t packetSent;     
+extern __IO uint32_t receiveLength;  // HJI
+extern __IO uint32_t packetSent;     // HJI
 
 #endif  /*__HW_CONFIG_H*/
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -1,26 +1,26 @@
-/*
- * This file is part of RaceFlight.
- *
- * RaceFlight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RaceFlight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
  * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-#pragma once
-
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
+#pragma once 
+       
 #define MAX_PROFILE_COUNT 1
 #define MAX_CONTROL_RATE_PROFILE_COUNT 1
 #define ONESHOT_FEATURE_CHANGED_DELAY_ON_BOOT_MS 1500
-
 typedef enum {
     FEATURE_RX_PPM = 1 << 0,
     FEATURE_VBAT = 1 << 1,
@@ -42,14 +42,13 @@ typedef enum {
     FEATURE_DISPLAY = 1 << 17,
     FEATURE_ONESHOT125 = 1 << 18,
     FEATURE_BLACKBOX = 1 << 19,
-	FEATURE_CHANNEL_FORWARDING = 1 << 20,
-	FEATURE_MULTISHOT = 1 << 21,
-	FEATURE_USE_PWM_RATE = 1 << 22,
-	FEATURE_RESERVED = 1 << 23,
-	FEATURE_TX_STYLE_EXPO = 1 << 24,
-	FEATURE_SBUS_INVERTER = 1 << 25,
+ FEATURE_CHANNEL_FORWARDING = 1 << 20,
+ FEATURE_MULTISHOT = 1 << 21,
+ FEATURE_USE_PWM_RATE = 1 << 22,
+ FEATURE_RESERVED = 1 << 23,
+ FEATURE_TX_STYLE_EXPO = 1 << 24,
+ FEATURE_SBUS_INVERTER = 1 << 25,
 } features_e;
-
 void handleOneshotFeatureChangeOnRestart(void);
 void latchActiveFeatures(void);
 bool featureConfigured(uint32_t mask);
@@ -58,9 +57,7 @@ void featureSet(uint32_t mask);
 void featureClear(uint32_t mask);
 void featureClearAll(void);
 uint32_t featureMask(void);
-
 void copyCurrentProfileToProfileSlot(uint8_t profileSlotIndex);
-
 void initEEPROM(void);
 void resetEEPROM(void);
 void readEEPROM(void);
@@ -68,13 +65,9 @@ void readEEPROMAndNotify(void);
 void writeEEPROM();
 void ensureEEPROMContainsValidData(void);
 void saveConfigAndNotify(void);
-
 uint8_t getCurrentProfile(void);
 void changeProfile(uint8_t profileIndex);
-
 uint8_t getCurrentControlRateProfile(void);
 void changeControlRateProfile(uint8_t profileIndex);
-
 bool canSoftwareSerialBeUsed(void);
-
 uint16_t getCurrentMinthrottle(void);

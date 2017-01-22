@@ -1,123 +1,93 @@
-/*
- * This file is part of RaceFlight.
- *
- * RaceFlight is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * RaceFlight is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
+/* 
+ * This file is part of RaceFlight. 
+ * 
+ * RaceFlight is free software: you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * RaceFlight is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * GNU General Public License for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License 
  * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+ * You should have received a copy of the GNU General Public License 
+ * along with RaceFlight.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
 #include <stdbool.h>
 #include <stdint.h>
-
 #include "platform.h"
-
 #include "common/axis.h"
-
 #include "drivers/sensor.h"
 #include "drivers/accgyro.h"
 #include "drivers/system.h"
-
 #include "sensors/battery.h"
 #include "sensors/sensors.h"
 #include "io/beeper.h"
 #include "sensors/boardalignment.h"
 #include "config/runtime_config.h"
 #include "config/config.h"
-
 #include "sensors/acceleration.h"
-
 int16_t accADC[XYZ_AXIS_COUNT];
-
-acc_t acc;                       
+acc_t acc;
 sensor_align_e accAlign = 0;
-uint16_t acc_1G = 256;          
-
-uint16_t calibratingA = 0;      
-
+uint16_t acc_1G = 256;
+uint16_t calibratingA = 0;
 extern uint16_t InflightcalibratingA;
 extern bool AccInflightCalibrationArmed;
 extern bool AccInflightCalibrationMeasurementDone;
 extern bool AccInflightCalibrationSavetoEEProm;
 extern bool AccInflightCalibrationActive;
-
 static flightDynamicsTrims_t *accelerationTrims;
-
 void accSetCalibrationCycles(uint16_t calibrationCyclesRequired)
 {
     calibratingA = calibrationCyclesRequired;
 }
-
 bool isAccelerationCalibrationComplete(void)
 {
     return calibratingA == 0;
 }
-
 bool isOnFinalAccelerationCalibrationCycle(void)
 {
     return calibratingA == 1;
 }
-
 bool isOnFirstAccelerationCalibrationCycle(void)
 {
     return calibratingA == CALIBRATING_ACC_CYCLES;
 }
-
 void resetRollAndPitchTrims(rollAndPitchTrims_t *rollAndPitchTrims)
 {
     rollAndPitchTrims->values.roll = 0;
     rollAndPitchTrims->values.pitch = 0;
 }
-
 void performAcclerationCalibration(rollAndPitchTrims_t *rollAndPitchTrims)
 {
     static int32_t a[3];
     uint8_t axis;
-
     for (axis = 0; axis < 3; axis++) {
-
-        
         if (isOnFirstAccelerationCalibrationCycle())
             a[axis] = 0;
-
-        
         a[axis] += accADC[axis];
-
-        
         accADC[axis] = 0;
         accelerationTrims->raw[axis] = 0;
     }
-
     if (isOnFinalAccelerationCalibrationCycle()) {
-        
         accelerationTrims->raw[X] = (a[X] + (CALIBRATING_ACC_CYCLES / 2)) / CALIBRATING_ACC_CYCLES;
         accelerationTrims->raw[Y] = (a[Y] + (CALIBRATING_ACC_CYCLES / 2)) / CALIBRATING_ACC_CYCLES;
         accelerationTrims->raw[Z] = (a[Z] + (CALIBRATING_ACC_CYCLES / 2)) / CALIBRATING_ACC_CYCLES - acc_1G;
-
         resetRollAndPitchTrims(rollAndPitchTrims);
-
         saveConfigAndNotify();
     }
-
     calibratingA--;
 }
-
 void performInflightAccelerationCalibration(rollAndPitchTrims_t *rollAndPitchTrims)
 {
     uint8_t axis;
     static int32_t b[3];
     static int16_t accZero_saved[3] = { 0, 0, 0 };
     static rollAndPitchTrims_t angleTrim_saved = { { 0, 0 } };
-
-    
     if (InflightcalibratingA == 50) {
         accZero_saved[X] = accelerationTrims->raw[X];
         accZero_saved[Y] = accelerationTrims->raw[Y];
@@ -127,21 +97,16 @@ void performInflightAccelerationCalibration(rollAndPitchTrims_t *rollAndPitchTri
     }
     if (InflightcalibratingA > 0) {
         for (axis = 0; axis < 3; axis++) {
-            
             if (InflightcalibratingA == 50)
                 b[axis] = 0;
-            
             b[axis] += accADC[axis];
-            
             accADC[axis] = 0;
             accelerationTrims->raw[axis] = 0;
         }
-        
         if (InflightcalibratingA == 1) {
             AccInflightCalibrationActive = false;
             AccInflightCalibrationMeasurementDone = true;
-            beeper(BEEPER_ACC_CALIBRATION); 
-            
+            beeper(BEEPER_ACC_CALIBRATION);
             accelerationTrims->raw[X] = accZero_saved[X];
             accelerationTrims->raw[Y] = accZero_saved[Y];
             accelerationTrims->raw[Z] = accZero_saved[Z];
@@ -150,57 +115,45 @@ void performInflightAccelerationCalibration(rollAndPitchTrims_t *rollAndPitchTri
         }
         InflightcalibratingA--;
     }
-    
-    if (AccInflightCalibrationSavetoEEProm) {      
+    if (AccInflightCalibrationSavetoEEProm) {
         AccInflightCalibrationSavetoEEProm = false;
         accelerationTrims->raw[X] = b[X] / 50;
         accelerationTrims->raw[Y] = b[Y] / 50;
-        accelerationTrims->raw[Z] = b[Z] / 50 - acc_1G;    
-
+        accelerationTrims->raw[Z] = b[Z] / 50 - acc_1G;
         resetRollAndPitchTrims(rollAndPitchTrims);
-
         saveConfigAndNotify();
     }
 }
-
 void applyAccelerationTrims(flightDynamicsTrims_t *accelerationTrims)
 {
     accADC[X] -= accelerationTrims->raw[X];
     accADC[Y] -= accelerationTrims->raw[Y];
     accADC[Z] -= accelerationTrims->raw[Z];
 }
-
 void updateAccelerationReadings(rollAndPitchTrims_t *rollAndPitchTrims)
 {
-	static bool acc_half = true;
-
-	if (acc_half)
-	{
-		acc_half = false;
-		if (!acc.read(accADC))
-		{
-			return;
-		}
-	}
-	else
-	{
-		acc_half = true;
-		alignSensors(accADC, accADC, accAlign);
-
-		if (!isAccelerationCalibrationComplete()) {
-			performAcclerationCalibration(rollAndPitchTrims);
-		}
-
-		if (feature(FEATURE_INFLIGHT_ACC_CAL)) {
-			performInflightAccelerationCalibration(rollAndPitchTrims);
-		}
-
-		applyAccelerationTrims(accelerationTrims);
-	}
-
-
+ static bool acc_half = true;
+ if (acc_half)
+ {
+  acc_half = false;
+  if (!acc.read(accADC))
+  {
+   return;
+  }
+ }
+ else
+ {
+  acc_half = true;
+  alignSensors(accADC, accADC, accAlign);
+  if (!isAccelerationCalibrationComplete()) {
+   performAcclerationCalibration(rollAndPitchTrims);
+  }
+  if (feature(FEATURE_INFLIGHT_ACC_CAL)) {
+   performInflightAccelerationCalibration(rollAndPitchTrims);
+  }
+  applyAccelerationTrims(accelerationTrims);
+ }
 }
-
 void setAccelerationTrims(flightDynamicsTrims_t *accelerationTrimsToUse)
 {
     accelerationTrims = accelerationTrimsToUse;

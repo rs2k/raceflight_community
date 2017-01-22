@@ -12,7 +12,10 @@
 obj/
 patches/
 startup_stm32f10x_md_gcc.s
+src/main/eschex/*.HEX
 
 # script-generated files
 docs/Manual.pdf
 README.pdf
+
+/Revo Debug/

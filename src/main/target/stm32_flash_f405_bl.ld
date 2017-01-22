@@ -15,7 +15,7 @@
 **
 **  Environment : Atollic TrueSTUDIO(R)
 **
-**  Distribution: The file is distributed ï¿½as is,ï¿½ without any warranty
+**  Distribution: The file is distributed “as is,” without any warranty
 **                of any kind.
 **
 **  (c)Copyright Atollic AB.
@@ -38,10 +38,17 @@ _Min_Stack_Size = 0x4000; /* required amount of stack */
 
 /* Specify the memory areas */
 
+/*
+0x08000000 to 0x08100000 1024kb full flash,
+0x08000000 to 0x08020000 128kb OPBL,
+0x08020000 to 0x08080000 384kb firmware,
+0x08080000 to 0x080A0000 128kb config,
+*/
 
 MEMORY
 {
-	FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 0x00040000
+	FLASH (rx)      : ORIGIN = 0x08020000, LENGTH = 0x00040000
+	ESCHEX (rx)     : ORIGIN = 0x08060000, LENGTH = 0x00080000
     CCM (rwx)       : ORIGIN = 0x10000000, LENGTH = 64K
 	RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 0x00020000
 	MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
@@ -53,6 +60,13 @@ REGION_ALIAS("SRAM", RAM);
 /* Section Definitions */
 SECTIONS
 {
+  /* Custom flash section for ESC hex files */
+  .eschex :
+  {
+    . = ALIGN(4);
+    *(.eschex)
+    . = ALIGN(4);
+  } >ESCHEX
 
   /* The program code and other data goes into FLASH */
   .text :

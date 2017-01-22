@@ -89,6 +89,8 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
 
     /* enable the PWR clock */
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, ENABLE);
+    //Fix BKR bug
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, DISABLE);
 
     EXTI_ClearITPendingBit(EXTI_Line0);
 }

@@ -14,7 +14,7 @@
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
  *
- *        http:
+ *        http://www.st.com/software_license_agreement_liberty_v2
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,7 +36,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 __IO uint32_t bDeviceState = UNCONNECTED; /* USB device status */
-__IO boolean fSuspendEnabled = TRUE; /* true when suspend is possible */  
+__IO boolean fSuspendEnabled = TRUE; /* true when suspend is possible */  // HJI
 __IO uint32_t EP[8];
 
 struct {

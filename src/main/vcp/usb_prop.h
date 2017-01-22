@@ -14,7 +14,7 @@
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
  *
- *        http:
+ *        http://www.st.com/software_license_agreement_liberty_v2
  *
  * Unless required by applicable law or agreed to in writing, software 
  * distributed under the License is distributed on an "AS IS" BASIS, 
@@ -43,14 +43,14 @@ typedef struct {
 /* Exported define -----------------------------------------------------------*/
 
 #define Virtual_Com_Port_GetConfiguration          NOP_Process
-
+//#define Virtual_Com_Port_SetConfiguration          NOP_Process
 #define Virtual_Com_Port_GetInterface              NOP_Process
 #define Virtual_Com_Port_SetInterface              NOP_Process
 #define Virtual_Com_Port_GetStatus                 NOP_Process
 #define Virtual_Com_Port_ClearFeature              NOP_Process
 #define Virtual_Com_Port_SetEndPointFeature        NOP_Process
 #define Virtual_Com_Port_SetDeviceFeature          NOP_Process
-
+//#define Virtual_Com_Port_SetDeviceAddress          NOP_Process
 
 #define SEND_ENCAPSULATED_COMMAND   0x00
 #define GET_ENCAPSULATED_RESPONSE   0x01

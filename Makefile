@@ -16,11 +16,9 @@
 
 # The target to build, see VALID_TARGETS below
 TARGET		?= REVO
-
+TELEM ?= _STD
 # Compile-time options
 OPTIONS		?=
-
-OPT		?= Os
 
 # Debugger optons, must be empty or GDB
 DEBUG ?=
@@ -39,15 +37,15 @@ FORKNAME			 = raceflight
 
 CC3D_TARGETS = CC3D CC3D_OPBL
 F1_TARGETS = NAZE OLIMEXINO CJMCU EUSTM32F103RC PORT103R ALIENWIIF1 AFROMINI
-F3_TARGETS = STM32F3DISCOVERY CHEBUZZF3 NAZE32PRO SPRACINGF3 IRCFUSIONF3 SPARKY ALIENWIIF3 COLIBRI_RACE MOTOLAB PIKOBLX RMDO BEEROTOR LUX_RACE KISS DOGE
-F4_TARGETS = SOULF4 REVO REVOLT SPARKY2 REVONANO REVONANO_VB ALIENFLIGHTF4 BLUEJAYF4 BLUEJAYF4_REV3 VRCORE QUANTON KKNGF4 KKNGF4_6500 HOOLIGAN PRACER KAKUTEF4
+F3_TARGETS = STM32F3DISCOVERY CHEBUZZF3 NAZE32PRO SPRACINGF3 SPRACINGF3EVO IRCFUSIONF3 SPARKY ALIENWIIF3 COLIBRI_RACE MOTOLAB ACROWHOOP PIKOBLX RMDO BEEROTOR LUX_RACE LUXV2 KISS DOGE
+F4_TARGETS = DEMON REVO INVADER REVOLT SPARKY2 REVONANO REVONANO_VB ALIENFLIGHTF4 BLUEJAYF4 VRCORE QUANTON KKNGF4 KKNGF4_6500 HOOLIGAN SPMFC384 SPMFC400 PRACER
 
-F405_TARGETS = SOULF4 REVO REVOLT SPARKY2 ALIENFLIGHTF4 BLUEJAYF4 BLUEJAYF4_REV3 VRCORE QUANTON KKNGF4 KKNGF4_6500 HOOLIGAN KAKUTEF4
-F4_256K_TARGETS	 = SOULF4 REVO REVO_OPBL REVOLT SPARKY2 REVONANO REVONANO_VB ALIENFLIGHTF4 BLUEJAYF4 BLUEJAYF4_REV3 VRCORE QUANTON QUANTON_OPBL AQ32_V2 PRACER REVONANO_VBKKNGF4 KKNGF4_6500 KKNGF4 HOOLIGAN KAKUTEF4
+F405_TARGETS = DEMON REVO INVADER REVOLT SPARKY2 ALIENFLIGHTF4 BLUEJAYF4 VRCORE QUANTON KKNGF4 KKNGF4_6500 HOOLIGAN
+F4_256K_TARGETS	 = DEMON REVO INVADER REVO_OPBL REVOLT SPARKY2 REVONANO REVONANO_VB ALIENFLIGHTF4 BLUEJAYF4 VRCORE QUANTON QUANTON_OPBL AQ32_V2 SPMFC384 PRACER REVONANO_VB KKNGF4 KKNGF4_6500 HOOLIGAN SPMFC400
 F4_512K_TARGETS	 =
 F405_TARGETS_16 = QUANTON
 F411_TARGETS = REVONANO REVONANO_VB
-F446_TARGETS	 = PRACER
+F446_TARGETS	 = SPMFC384 SPMFC400 PRACER
 
 VALID_TARGETS	 = $(F1_TARGETS) $(CC3D_TARGETS) $(F3_TARGETS) $(F4_TARGETS)
 
@@ -56,7 +54,7 @@ OPBL_VALID_TARGETS = CC3D_OPBL REVO_OPBL REVONANO_OPBL SPARKY2_OPBL
 
 64K_TARGETS  = CJMCU
 128K_TARGETS = ALIENWIIF1 $(CC3D_TARGETS) NAZE OLIMEXINO RMDO AFROMINI
-256K_TARGETS = EUSTM32F103RC PORT103R STM32F3DISCOVERY CHEBUZZF3 NAZE32PRO KISS DOGE SPRACINGF3 BEEROTOR IRCFUSIONF3 SPARKY ALIENWIIF3 COLIBRI_RACE MOTOLAB PIKOBLX LUX_RACE $(F4_256K_TARGETS)
+256K_TARGETS = EUSTM32F103RC PORT103R STM32F3DISCOVERY CHEBUZZF3 NAZE32PRO KISS DOGE SPRACINGF3 SPRACINGF3EVO BEEROTOR IRCFUSIONF3 SPARKY ALIENWIIF3 COLIBRI_RACE MOTOLAB ACROWHOOP PIKOBLX LUX_RACE LUXV2 $(F4_256K_TARGETS)
 512K_TARGETS = $(F4_512K_TARGETS)
 
 
@@ -142,8 +140,10 @@ endif
 LD_SCRIPT	 = $(LINKER_DIR)/stm32_flash_f303_$(FLASH_SIZE)k.ld
 
 ARCH_FLAGS	 = -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant -Wdouble-promotion
-DEVICE_FLAGS = -DSTM32F303xC -DSTM32F303
+DEVICE_FLAGS = -DSTM32F303xC -DSTM32F303 -DSTM32F3
 TARGET_FLAGS = -D$(TARGET)
+
+
 ifeq ($(TARGET),CHEBUZZF3)
 # CHEBUZZ is a VARIANT of STM32F3DISCOVERY
 TARGET_FLAGS := $(TARGET_FLAGS) -DSTM32F3DISCOVERY
@@ -240,6 +240,11 @@ else
 $(error Unknown MCU for F4 target)
 endif
 
+
+
+ifeq ($(TELEM),_SPEKTRUM_TELEM)
+DEVICE_FLAGS += -DTELEM
+endif
 
 TARGET_FLAGS = -D$(TARGET)
 
@@ -411,7 +416,7 @@ COMMON_SRC = build_config.c \
 		   drivers/sound_beeper.c \
 		   drivers/system.c \
 		   drivers/gyro_sync.c \
-		   eschex/esc_binary.c \
+		   esc_binary.c \
 		   io/beeper.c \
 		   io/esc_1wire.c \
 		   io/esc_1wire_blheli.c \
@@ -481,7 +486,8 @@ STM32F4xx_COMMON_SRC = \
 		   drivers/timer.c \
 		   drivers/timer_stm32f4xx.c \
 		   drivers/flash_m25p16.c \
-		   io/flashfs.c
+		   io/flashfs.c  \
+		   rx/spektrumTelemetry.c \
 
 STM32F411_COMMON_SRC = \
 		   startup_stm32f411xe.s \
@@ -506,7 +512,8 @@ STM32F411_COMMON_SRC = \
 		   drivers/timer.c \
 		   drivers/timer_stm32f4xx.c \
 		   drivers/flash_m25p16.c \
-		   io/flashfs.c
+		   io/flashfs.c  \
+		   rx/spektrumTelemetry.c \
 
 STM32F446_COMMON_SRC = \
 		   startup_stm32f446xx.s \
@@ -531,7 +538,8 @@ STM32F446_COMMON_SRC = \
 		   drivers/timer.c \
 		   drivers/timer_stm32f4xx.c \
 		   drivers/flash_m25p16.c \
-		   io/flashfs.c
+		   io/flashfs.c \
+		   rx/spektrumTelemetry.c \
 
 VCP_SRC = \
 		   vcp/hw_config.c \
@@ -720,12 +728,6 @@ CC3D_SRC = \
 		   $(COMMON_SRC) \
 		   $(VCP_SRC)
 
-SOULF4_SRC = $(STM32F4xx_COMMON_SRC) \
-		   drivers/accgyro_spi_mpu6000.c \
-		   $(HIGHEND_SRC) \
-		   $(COMMON_SRC) \
-		   $(VCPF4_SRC)
-
 REVO_SRC = $(STM32F4xx_COMMON_SRC) \
 		   drivers/accgyro_spi_mpu6000.c \
 		   drivers/barometer_ms5611.c \
@@ -734,9 +736,25 @@ REVO_SRC = $(STM32F4xx_COMMON_SRC) \
 		   $(COMMON_SRC) \
 		   $(VCPF4_SRC)
 
+INVADER_SRC = $(STM32F4xx_COMMON_SRC) \
+		   drivers/accgyro_spi_mpu6000.c \
+		   drivers/barometer_ms5611.c \
+		   drivers/compass_hmc5883l.c \
+		   $(HIGHEND_SRC) \
+		   $(COMMON_SRC) \
+		   $(VCPF4_SRC)
+		   
 REVOLT_SRC = $(STM32F4xx_COMMON_SRC) \
 		   drivers/accgyro_spi_mpu9250.c \
 		   drivers/barometer_ms5611.c \
+		   $(HIGHEND_SRC) \
+		   $(COMMON_SRC) \
+		   $(VCPF4_SRC)
+
+DEMON_SRC = $(STM32F4xx_COMMON_SRC) \
+		   drivers/accgyro_spi_mpu6000.c \
+		   drivers/barometer_ms5611.c \
+		   drivers/compass_hmc5883l.c \
 		   $(HIGHEND_SRC) \
 		   $(COMMON_SRC) \
 		   $(VCPF4_SRC)
@@ -771,7 +789,16 @@ SPARKY2_SRC = $(STM32F4xx_COMMON_SRC) \
 		   $(COMMON_SRC) \
 		   $(VCPF4_SRC)
 
-KAKUTEF4_SRC = $(STM32F4xx_COMMON_SRC) \
+SPMFC384_SRC = \
+           $(STM32F446_COMMON_SRC) \
+		   drivers/accgyro_spi_mpu9250.c \
+		   drivers/barometer_ms5611.c \
+		   $(HIGHEND_SRC) \
+		   $(COMMON_SRC) \
+		   $(VCPF4_SRC)
+
+SPMFC400_SRC = \
+           $(STM32F446_COMMON_SRC) \
 		   drivers/accgyro_spi_mpu9250.c \
 		   drivers/barometer_ms5611.c \
 		   $(HIGHEND_SRC) \
@@ -799,13 +826,6 @@ ALIENFLIGHTF4_SRC = \
 		   $(VCPF4_SRC)
 
 BLUEJAYF4_SRC = $(STM32F4xx_COMMON_SRC) \
-		   drivers/accgyro_spi_mpu9250.c \
-		   drivers/barometer_ms5611.c \
-		   $(HIGHEND_SRC) \
-		   $(COMMON_SRC) \
-		   $(VCPF4_SRC)
-
-BLUEJAYF4_REV3_SRC = $(STM32F4xx_COMMON_SRC) \
 		   drivers/accgyro_spi_mpu9250.c \
 		   drivers/barometer_ms5611.c \
 		   $(HIGHEND_SRC) \
@@ -889,16 +909,10 @@ CHEBUZZF3_SRC = \
 
 COLIBRI_RACE_SRC = \
 		   $(STM32F30x_COMMON_SRC) \
-		   io/i2c_bst.c \
-		   drivers/bus_bst_stm32f30x.c \
-		   drivers/display_ug2864hsweg01.c \
 		   drivers/accgyro_mpu.c \
 		   drivers/accgyro_mpu6500.c \
 		   drivers/accgyro_spi_mpu6500.c \
 		   drivers/accgyro_mpu6500.c \
-		   drivers/barometer_ms5611.c \
-		   drivers/compass_ak8975.c \
-		   drivers/compass_hmc5883l.c \
 		   drivers/serial_usb_vcp.c \
 		   $(HIGHEND_SRC) \
 		   $(COMMON_SRC) \
@@ -908,6 +922,15 @@ LUX_RACE_SRC = \
 		   $(STM32F30x_COMMON_SRC) \
 		   drivers/accgyro_mpu.c \
 		   drivers/accgyro_spi_mpu9250.c \
+		   drivers/serial_usb_vcp.c \
+		   $(HIGHEND_SRC) \
+		   $(COMMON_SRC) \
+		   $(VCP_SRC)
+
+LUXV2_SRC = \
+		   $(STM32F30x_COMMON_SRC) \
+		   drivers/accgyro_mpu.c \
+		   drivers/accgyro_spi_mpu6000.c \
 		   drivers/serial_usb_vcp.c \
 		   $(HIGHEND_SRC) \
 		   $(COMMON_SRC) \
@@ -972,6 +995,16 @@ SPRACINGF3_SRC = \
 		   $(HIGHEND_SRC) \
 		   $(COMMON_SRC)
 
+SPRACINGF3EVO_SRC = \
+		   $(STM32F30x_COMMON_SRC) \
+		   drivers/accgyro_mpu.c \
+		   drivers/accgyro_spi_mpu9250.c \
+		   drivers/serial_usb_vcp.c \
+		   $(HIGHEND_SRC) \
+		   $(COMMON_SRC) \
+		   $(VCP_SRC)
+
+
 IRCFUSIONF3_SRC = \
 		   $(STM32F30x_COMMON_SRC) \
 		   drivers/accgyro_mpu.c \
@@ -1018,6 +1051,21 @@ PIKOBLX_SRC = \
 		   $(COMMON_SRC) \
 		   $(VCP_SRC)
 
+ACROWHOOP_SRC = \
+		   $(STM32F30x_COMMON_SRC) \
+		   drivers/accgyro_mpu.c \
+		   drivers/display_ug2864hsweg01.c \
+		   drivers/accgyro_mpu6050.c \
+		   drivers/accgyro_spi_mpu6000.c \
+		   drivers/barometer_ms5611.c \
+		   drivers/compass_hmc5883l.c \
+		   drivers/serial_usb_vcp.c \
+		   drivers/flash_m25p16.c \
+		   io/flashfs.c \
+		   $(HIGHEND_SRC) \
+		   $(COMMON_SRC) \
+		   $(VCP_SRC)
+		   
 KISS_SRC = \
 		   $(STM32F30x_COMMON_SRC) \
 		   drivers/accgyro_mpu.c \
@@ -1057,21 +1105,22 @@ SIZE		 = arm-none-eabi-size
 # Tool options.
 #
 
+DEBUG_FLAGS	 =
+
 ifeq ($(DEBUG),GDB)
 OPTIMIZE	 = -O0
 LTO_FLAGS	 = $(OPTIMIZE)
+DEBUG_FLAGS	 = -ggdb3 -DDEBUG
 else
 ifeq ($(TARGET),$(filter $(TARGET),SPARKY2))
-OPTIMIZE	 = -$(OPT)
-else ifeq ($(TARGET),$(filter $(TARGET), KAKUTEF4 SOULF4 REVO REVOLT REVONANO REVONANO_VB ALIENFLIGHTF4 BLUEJAYF4 BLUEJAYF4_REV3 VRCORE KKNGF4 KKNGF4_6500 HOOLIGAN PRACER))
-OPTIMIZE	 = -$(OPT)
+OPTIMIZE	 = -O2
+else ifeq ($(TARGET),$(filter $(TARGET),DEMON REVO REVOLT REVONANO REVONANO_VB ALIENFLIGHTF4 BLUEJAYF4 VRCORE KKNGF4 KKNGF4_6500 HOOLIGAN SPMFC384 SPMFC400 PRACER))
+OPTIMIZE	 = -O2
 else
-OPTIMIZE	 = -$(OPT)
+OPTIMIZE	 = -Os
 endif
 LTO_FLAGS	 = -flto -fuse-linker-plugin $(OPTIMIZE)
 endif
-
-DEBUG_FLAGS	 = -ggdb3 -DDEBUG
 
 CFLAGS		 = $(ARCH_FLAGS) \
 		   $(LTO_FLAGS) \
@@ -1129,7 +1178,7 @@ endif
 CC3D_OPBL_SRC     = $(CC3D_SRC)
 REVONANO_VB_SRC      = $(REVONANO_SRC)
 
-TARGET_BIN	 = $(BIN_DIR)/$(TARGET).bin
+TARGET_BIN	 = $(BIN_DIR)/$(TARGET)$(TELEM).bin
 TARGET_ELF	 = $(OBJECT_DIR)/$(FORKNAME)_$(TARGET).elf
 TARGET_OBJS	 = $(addsuffix .o,$(addprefix $(OBJECT_DIR)/$(TARGET)/,$(basename $($(TARGET)_SRC))))
 TARGET_DEPS	 = $(addsuffix .d,$(addprefix $(OBJECT_DIR)/$(TARGET)/,$(basename $($(TARGET)_SRC))))
@@ -1211,6 +1260,8 @@ st-flash_$(TARGET): $(TARGET_BIN)
 st-flash: st-flash_$(TARGET)
 
 binary: $(TARGET_BIN)
+
+
 hex:    $(TARGET_HEX)
 
 unbrick_$(TARGET): $(TARGET_HEX)
@@ -1248,4 +1299,3 @@ $(TARGET_OBJS) : Makefile
 
 # include auto-generated dependencies
 -include $(TARGET_DEPS)
-
